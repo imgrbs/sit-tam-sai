@@ -5,6 +5,8 @@ import {
   notification
  } from 'antd'
 
+import firebase from 'firebase'
+
 import { insert } from '../../config/firebase'
 
 function guid() {
@@ -29,12 +31,17 @@ export default class Index extends Component {
   };
   handleStory = (e) => {
     e.preventDefault();
-    insert(`/story/${guid()}`, { ...this.state });
+    const story = {
+      ...this.state,
+      timestamp: firebase.database.ServerValue.TIMESTAMP
+    }
+    insert(`/story/${guid()}`, story);
     openNotificationWithIcon('success');
     this.setState({ story: '', author: '' })
   };
 
   render() {
+    const { story, author } = this.state
     return (
       <React.Fragment>
         <div className="container">
@@ -42,9 +49,9 @@ export default class Index extends Component {
             <div className="col-12 text-center">
               <form onSubmit={this.handleStory}>
                 <h1 className='mt-3' >ร่วมส่งเรื่องราว SIT ตาม สาย กัน !</h1>
-                <Input.TextArea placeholder='เรื่องราวของคุณ...' className='my-3' onChange={e => this.setState({ story: e.target.value })} cols="30" rows="10" required />
-                <Input placeholder='นามแฝง... (ไม่บังคับ)' className='my-3' onChange={e => this.setState({ author: e.target.value })}  />
-                <Button size='large' className='my-3 w-100' >ส่งหัวข้อ !</Button>
+                <Input.TextArea value={story} placeholder='เรื่องราวของคุณ...' className='my-3' onChange={e => this.setState({ story: e.target.value })} cols="30" rows="10" required />
+                <Input value={author} placeholder='นามแฝง... (ไม่บังคับ)' className='my-3' onChange={e => this.setState({ author: e.target.value })}  />
+                <Button htmlType='submit' size='large' className='my-3 w-100' >ส่งหัวข้อ !</Button>
               </form>
             </div>
           </div>

@@ -23,3 +23,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.ant-notification {
+  margin: 15px;
+}
